@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
 const App = () => {
+  const [loading, setLoading] = useState(true); // Loading state
   const [step, setStep] = useState('start');
   const [handsomeStep, setHandsomeStep] = useState(0);
   const [noButtonScale, setNoButtonScale] = useState(1);
@@ -13,6 +14,12 @@ const App = () => {
     document.body.style.overflow = 'hidden';
     document.body.style.margin = '0';
     document.body.style.backgroundColor = '#FFB6C1';
+
+    // Simulate a loading delay for the heart effect
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const myPhotos = [
@@ -142,6 +149,34 @@ const App = () => {
     cursor: 'pointer',
     width: '100%'
   };
+
+  // Heart Loading Screen
+  if (loading) {
+    return (
+      <div style={{ ...containerStyle, backgroundColor: '#FFB6C1' }}>
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 0.8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{ fontSize: '100px', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.5))' }}
+        >
+          💖
+        </motion.div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ position: 'absolute', bottom: '20%', fontWeight: 'bold', fontSize: '1.2rem' }}
+        >
+          Loading for Ceris...
+        </motion.p>
+      </div>
+    );
+  }
 
   return (
     <div style={containerStyle}>
@@ -298,13 +333,9 @@ const App = () => {
 
         {step === 'final' && (
             <motion.div key="final" variants={slideVariants} initial="enter" animate="center" exit="exit" style={cardStyle}>
-                <motion.h1 
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    style={{ fontSize: '4rem', margin: 0 }}
-                >
+                <h1 style={{ fontSize: '4rem', margin: 0 }}>
                     🎁
-                </motion.h1>
+                </h1>
                 <p style={{ fontSize: '1.4rem', fontWeight: 'bold', margin: '15px 0' }}>Karena udah ngakuuu! ✅</p>
                 <div style={{ background: 'rgba(255,255,255,0.2)', padding: '20px', borderRadius: '25px', border: '2px dashed white', width: '100%', boxSizing: 'border-box' }}>
                     <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
